@@ -1,0 +1,30 @@
+#Programa 4
+#Declaracion de variables
+int pequeno;
+int grande;
+int rango;
+int num;
+int limite;
+
+writeln("Ingresa "+limite+" numeros: ");
+readln(num);
+
+pequeno=num;
+grande=num;
+
+#Determinacion
+while(limite){
+	readln(num);
+	if(num>grande){
+		grande=num;
+	}
+	
+	if(num<pequeno){
+		pequeno=num;
+	}
+	
+	limite=limite-1;
+}
+
+rango=grande-pequeno;
+writeln("El rango es de:"+rango);

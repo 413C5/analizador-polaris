@@ -1,0 +1,246 @@
+options{
+    JAVA_UNICODE_ESCAPE=true;
+    STATIC=false;
+}
+
+PARSER_BEGIN(ProyectoParcial1)
+    public class ProyectoParcial1{}
+PARSER_END(ProyectoParcial1)
+
+
+
+//Expresiones regulares--analizador lexico
+//Palabras reservadas
+TOKEN:{
+    //Tipos de datos
+    <ENTERO: "int">         |
+    <FLOTANTE: "float">     |
+    <STRING : "String">     |
+
+    //Lectura y escritura
+    <LECTURA: "readln">     |
+    <IMPRIMIR: "writeln" >  |
+    
+    //Sentencias de control
+    <IF: "if">              |
+    <FOR: "for">            |
+    <ELSE_IF: "else if">    |
+    <ELSE: "else">          |
+    <WHILE:"while">
+}
+
+//Operadores
+TOKEN:{
+    <ASIGNACION: ["="]>                                  |
+    <SUMA: ["+"]>                                       |
+    <RESTA: ["-"]>                                      |
+    <MULTIPLICACION: ["*"]>                             |
+    <DIVISION: ["/"]>                                   |
+    <MODULO : ["%"]>                                    |
+    <POTENCIA : "*""*">                                 |
+    <RAIZ_CUADRADA : "%""%">
+}
+
+//Operadores de comparacion
+TOKEN:{
+    <COMPARACION: "=""=">   |
+    <MENOR_QUE: ["<"]>      |
+    <MAYOR_QUE: [">"]>      |
+    <MENOR_IGUAL: "<""=">   |
+    <MAYOR_IGUAL: ">""=">   
+}
+
+//Operadores lógicos
+TOKEN:{
+    <AND: "&""&">     |
+    <OR: "|""|">      |
+    <NOT: "!""=">      
+}
+
+//Parentesis
+TOKEN:{
+    <PAR_IZQ: ["("]>     |
+    <PAR_DER: [")"]>        
+}
+
+//Brackets
+TOKEN:{
+    <BR_IZQ: ["["]>     |
+    <BR_DER: ["]"]>        
+}
+
+//Curly brackets
+TOKEN:{
+    <CUR_IZQ: ["{"]>     |
+    <CUR_DER: ["}"]>        
+}
+
+//Signos de puntuacion 
+TOKEN:{
+    <PUNTO: ["."]>     |
+    <PUNTO_COMA: [";"]>        
+}
+
+
+//Variables
+TOKEN:{     
+        <VARIABLE : <LETRA> ( <LETRA> | <DIGITO> | "_" )* (<LETRA> | <DIGITO>)*>    |
+        <NUM_ENTERO : (<DIGITO>)+ >                                                 |
+        <NUM_FLOTANTE : <NUM_ENTERO> <PUNTO> <NUM_ENTERO> >                         |
+        <#DIGITO : ["0"-"9"]>                                                       |
+        <#LETRA : ["a"-"z","A"-"Z"] >                                
+}
+
+//Cadena de caracteres
+TOKEN:{
+    <CADENA: "\"" (~["\n","\r","\""])* "\"">
+}
+
+SKIP:{" " | "\n" | "\r" | "\t"}
+
+//Comentario
+SPECIAL_TOKEN:{
+    <UNA_LINEA : "#"(~["\n","\r"])*("\n" | "\r" | "\n\r")>
+}
+
+
+//Comentario multi linea
+SPECIAL_TOKEN:{
+    <MULTI_LINEA: "/*">: DENTRO_DEL_COMENTARIO
+}
+
+<DENTRO_DEL_COMENTARIO> MORE: {
+    <~[]>
+}
+
+<DENTRO_DEL_COMENTARIO> SPECIAL_TOKEN: {
+    <FIN_MULTI_LINEA : "*/"> : DEFAULT
+}
+
+//Aqui termina el analizador lexico
+//Analizador sintactico 
+
+void Programa():{}
+{
+    (Sentencia())+
+}
+
+void Sentencia():{}
+{
+    DeclararVariable()<PUNTO_COMA> | SentenciaLeer()<PUNTO_COMA> | SentenciaImprimir()<PUNTO_COMA> | AsignarValor()<PUNTO_COMA> 
+                          | SentenciaIf() | SentenciaFor() | SentenciaWhile()
+}
+
+void DeclararVariable():{}
+{
+    TipoDato()<VARIABLE>
+}
+
+void TipoDato():{}
+{
+    <ENTERO> | <FLOTANTE> | <STRING>
+}
+
+void SentenciaLeer():{}
+{
+    <LECTURA> <PAR_IZQ> <VARIABLE> <PAR_DER>
+}
+
+void SentenciaImprimir():{}
+{
+    <IMPRIMIR> <PAR_IZQ> Expresion() <PAR_DER>
+}
+
+void AsignarValor():{}
+{
+    <VARIABLE> <ASIGNACION> Expresion()
+}
+
+void Expresion():{}
+{
+    ExpresionSimple() (OperadorComparacion() ExpresionSimple())?
+}
+
+void OperadorComparacion():{}
+{
+    <COMPARACION> | <MENOR_QUE> | <MAYOR_QUE> | <MENOR_IGUAL> | <MAYOR_IGUAL>
+}
+
+void ExpresionSimple():{}
+{
+    Termino() (OperadorTermino() Termino())*
+}
+
+void OperadorTermino():{}
+{
+    <SUMA> | <RESTA>
+}
+
+void Termino():{}
+{
+    Factor() (OperadorFactor() Factor())*
+}
+
+void OperadorFactor():{}
+{
+    <MULTIPLICACION> | <DIVISION> | <MODULO> 
+}
+
+void Factor():{}
+{
+    Complejo() (OperadorComplejo() Complejo())*
+}
+
+void OperadorComplejo():{}
+{
+    <POTENCIA> | <RAIZ_CUADRADA>
+}
+
+void Complejo():{}
+{
+    <PAR_IZQ>Expresion()<PAR_DER> | Valor() | <VARIABLE>
+}
+
+void Valor():{}
+{
+    <NUM_ENTERO> | <NUM_FLOTANTE> | <CADENA>
+}
+
+void OperadorLogico():{}
+{
+    <AND> | <OR> | <NOT>
+}
+
+void SentenciaIf():{}
+{
+    <IF> <PAR_IZQ> ExpresionCondicional() <PAR_DER> <CUR_IZQ> (Sentencia())+ <CUR_DER>
+    (ExpresionElse())?
+}
+
+void ExpresionElse():{}
+{
+    <ELSE> <CUR_IZQ> (Sentencia())+ <CUR_DER>
+}
+
+void ExpresionCondicional():{}
+{
+    Expresion() (OperadorLogico() Expresion())*
+}
+
+void SentenciaFor():{}
+{
+    <FOR> <PAR_IZQ> <ENTERO> <VARIABLE> <ASIGNACION> <NUM_ENTERO> <PUNTO_COMA>
+    <VARIABLE> OperadorComparacion()<NUM_ENTERO> <PUNTO_COMA>
+    <VARIABLE> OperadorAumento() <PAR_DER> <CUR_IZQ> (Sentencia())+ <CUR_DER>
+}
+
+void OperadorAumento():{}
+{
+    "++" | "--"
+}
+
+
+void SentenciaWhile():{}
+{
+    <WHILE> <PAR_IZQ> ExpresionCondicional() <PAR_DER> <CUR_IZQ> (Sentencia())+ <CUR_DER>
+}

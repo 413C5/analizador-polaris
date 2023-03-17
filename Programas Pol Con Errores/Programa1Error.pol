@@ -1,0 +1,29 @@
+#Variables
+#Variable no declarada
+float consumo;
+float costo;
+
+#Variable previamente ya declarada
+int consumo
+
+writeln("Calculo de datos de recibo CFE");
+writeln("Introduce el consumo de kWh:");
+readln(consumo);
+
+if(consumo<=350){
+	costo=consumo*0.595;
+}
+
+#Variable no declarada
+if(con<=1200){
+	consumo=consumo-350;
+	costo=(350*0.595)+(consumo*0.893);
+}
+
+else{
+	consumo=consumo-1200;
+	costo=(350*0.595)+(850*0.893)+(consumo)*2.361;
+}
+
+costo=costo+(costo*0.15);
+writeln("El costo del consumo en el recibo es de :"+costo);

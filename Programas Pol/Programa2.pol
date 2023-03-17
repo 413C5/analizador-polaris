@@ -1,0 +1,64 @@
+#Variables
+writeln("Calculo de grado de acero");
+float dureza;
+float contenido;
+float tension;
+int condicion1;
+int condicion2;
+int condicion3;
+int grado;
+
+condicion1=0;
+condicion2=0;
+condicion3=0;
+grado=0;
+
+
+writeln("Dureza del acero:");
+readln(dureza);
+
+writeln("Contenido del carbon:");
+readln(contenido);
+
+writeln("Fuerza de la tension:");
+readln(tension);
+
+#Evaluacion de condiciones
+if(dureza>50){
+	condicion1=1;
+}
+
+if(contenido<0.7){
+	condicion2=1;
+}
+
+if (tension>=5600){
+	condicion3=1;
+}
+
+#Determinacion de grado
+if(condicion1==1 && condicion2==1 && condicion3==1){
+	grado=10;
+}
+
+if(condicion1==1 && condicion2==1 && condicion3==0){
+	grado=9;
+}
+
+if(condicion1==0 && condicion2==1 && condicion3==1){
+	grado=8;
+}
+
+if(condicion1==1 && condicion2==0 && condicion3==1){
+	grado=7;
+}
+
+if(condicion1==1 || condicion2==1 || condicion3==1){
+	grado=6;
+}
+
+else{
+	grado=5;
+}
+
+writeln("El grado de carbon en el metal es de:"+grado);
