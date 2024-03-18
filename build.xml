@@ -70,4 +70,8 @@
     nbproject/build-impl.xml file. 
 
     -->
+
+    <fileset dir="${build.classes.dir}">
+        <include name="proyecto1/resources/**"/>
+    </fileset>
 </project>

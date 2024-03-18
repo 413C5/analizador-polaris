@@ -6,7 +6,12 @@ package proyecto1;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -18,11 +23,12 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 public class Arbol extends javax.swing.JFrame {
     ImageIcon icon,miniIcon;
     Image miniImagen;
-    public Arbol() {
+    public Arbol() throws IOException {
         initComponents();
         
         //Cargar icono a logo y nodos
-        icon = new ImageIcon(getClass().getResource("/proyecto1/resources/logo.jpg")); //Sirve para agregar icono a mi ventana
+        InputStream inputStream = getClass().getResourceAsStream("/proyecto1/resources/logo.jpg");
+        icon = new ImageIcon(ImageIO.read(inputStream)); //Sirve para agregar icono a mi ventana
         setIconImage(icon.getImage()); //Se establece el archivo de icono
         
         miniImagen = icon.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); //Agarro mi imagen para hacerla chica
@@ -111,7 +117,11 @@ public class Arbol extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Arbol().setVisible(true);
+                try {
+                    new Arbol().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Arbol.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

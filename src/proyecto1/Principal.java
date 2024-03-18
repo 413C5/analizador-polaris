@@ -26,7 +26,9 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledDocument;
 import java.awt.Color;
 import java.awt.Image;
+import java.io.IOException;
 import java.net.URL;
+import javax.imageio.ImageIO;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -83,11 +85,12 @@ public class Principal extends javax.swing.JFrame {
     //public DefaultTreeModel modelo2;
     
     //Constructor
-    public Principal() {
+    public Principal() throws IOException {
         initComponents();
         
         //Cargar icono a logo y nodos
-        icon = new ImageIcon(getClass().getResource("/proyecto1/resources/logo.jpg")); //Sirve para agregar icono a mi ventana
+        InputStream inputStream = getClass().getResourceAsStream("/proyecto1/resources/logo.jpg");
+        icon = new ImageIcon(ImageIO.read(inputStream)); //Sirve para agregar icono a mi ventana
         setIconImage(icon.getImage()); //Se establece el archivo de icono
         
         //miniImagen = icon.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); //Agarro mi imagen para hacerla chica
@@ -320,6 +323,8 @@ public class Principal extends javax.swing.JFrame {
             txtCodigo.setCaretPosition(txtCodigo.getDocument().getDefaultRootElement().getElement(Integer.parseInt(strs.get(0))-1).getStartOffset()); 
             txtCodigo.requestFocus();
             System.out.println(Arrays.asList(str.trim().split(" ")));
+        } catch (IOException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }  
     }//GEN-LAST:event_btnLexicoActionPerformed
    
@@ -434,7 +439,12 @@ public class Principal extends javax.swing.JFrame {
                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-                Principal frmPrincipal= new Principal();
+                Principal frmPrincipal = null;
+                try {
+                    frmPrincipal = new Principal();
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 frmPrincipal.setVisible(true);
                 frmPrincipal.setResizable(false);
             }
