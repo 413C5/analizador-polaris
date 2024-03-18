@@ -24,9 +24,19 @@ Polaris is a custom programming language inspired by the syntax of C#, Java, Pyt
 - Logical operators are used as in C# or Java.
 - Post-increment and post-decrement operations are supported.
 
+## Included Programs
+
+Some programs are included for testing, both normal ones and error-free:
+
+- CFE Bill Calculation
+- Steel Grade Classifier
+- Armstrong Number Finder
+- Range Finder
+- Prime Factor Finder
+
 # How to Run this Project
 
-You can compile this project using the latest version of Netbeans, or alternatively, download the file from releases. Examples programs are provided
+You can compile this project using the latest version of Netbeans, or alternatively, download the file from releases. Examples programs are included.
 
 # About this project
 
