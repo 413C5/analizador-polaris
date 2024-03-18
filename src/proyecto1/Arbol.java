@@ -22,7 +22,7 @@ public class Arbol extends javax.swing.JFrame {
         initComponents();
         
         //Cargar icono a logo y nodos
-        icon=new ImageIcon("image/logo.jpg"); //Sirve para agregar icono a mi ventana
+        icon = new ImageIcon(getClass().getResource("/proyecto1/resources/logo.jpg")); //Sirve para agregar icono a mi ventana
         setIconImage(icon.getImage()); //Se establece el archivo de icono
         
         miniImagen = icon.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); //Agarro mi imagen para hacerla chica
